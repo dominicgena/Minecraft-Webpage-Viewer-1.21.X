@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.util.Identifier;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

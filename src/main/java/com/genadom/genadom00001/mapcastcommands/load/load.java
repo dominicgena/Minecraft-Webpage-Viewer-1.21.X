@@ -26,7 +26,7 @@ public class load {
                                     // Load JSON file
                                     Path path = Paths.get("config/mapcast/savedprofiles", name + ".json");
                                     if (Files.exists(path)) {
-                                        context.getSource().sendFeedback(() -> Text.of("JSON file loaded at " + path.toString() + " with name \"" + name + ".json\""), false);
+                                        context.getSource().sendFeedback(() -> Text.of("JSON file loaded at " + path.toString()), false);
                                     } else {
                                         context.getSource().sendFeedback(() -> Text.of("Failed to load mapcast!  (check your spelling)"), false);
                                     }
