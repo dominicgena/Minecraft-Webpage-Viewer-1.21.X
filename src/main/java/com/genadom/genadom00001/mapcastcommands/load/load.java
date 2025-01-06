@@ -1,5 +1,6 @@
 package com.genadom.genadom00001.mapcastcommands.load;
 
+import com.genadom.genadom00001.mapcastcommands.ProfileSuggestionProvider;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -18,6 +19,7 @@ public class load {
         dispatcher.register(literal("mapcast")
                 .then(literal("load")
                         .then(CommandManager.argument("name", StringArgumentType.string())
+                                .suggests(ProfileSuggestionProvider.SUGGEST_PROFILES)
                                 .executes(context -> {
                                     String name = StringArgumentType.getString(context, "name");
 
@@ -26,7 +28,7 @@ public class load {
                                     if (Files.exists(path)) {
                                         context.getSource().sendFeedback(() -> Text.of("JSON file loaded at " + path.toString() + " with name \"" + name + ".json\""), false);
                                     } else {
-                                        context.getSource().sendFeedback(() -> Text.of("Failed to load mapcast!"), false);
+                                        context.getSource().sendFeedback(() -> Text.of("Failed to load mapcast!  (check your spelling)"), false);
                                     }
                                     return 1;
                                 })
