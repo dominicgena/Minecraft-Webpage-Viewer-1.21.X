@@ -1,17 +1,20 @@
 package com.genadom.genadom00001;
 
+import com.genadom.genadom00001.mapcastcommands.add.add;
+import com.genadom.genadom00001.mapcastcommands.load.load;
+import com.genadom.genadom00001.mapcastcommands.remove.remove;
 import net.fabricmc.api.ModInitializer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
 public class MinecraftWebpageViewer implements ModInitializer {
-	public static final String MOD_ID = "genadom00001";
-
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
 	public void onInitialize() {
-
+		// Register commands
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+			add.register(dispatcher);
+			load.register(dispatcher);
+			remove.register(dispatcher);
+		});
 	}
-}// test commit
+}

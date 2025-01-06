@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "com.genadom.genadom00001.MinecraftWebpageViewer"
+			"com.genadom.genadom00001.MinecraftWebpageViewer"
 		],
 		"fabric-datagen": [
 			"com.genadom.genadom00001.MinecraftWebpageViewerDataGenerator"
