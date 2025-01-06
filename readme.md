@@ -51,7 +51,21 @@ if __name__ == "__main__":
     root = tk.Tk()
     viewer = ScreenshotViewer(root)
     root.mainloop()
-
+```
 Ensure tkinter and pillow are installed by running `pip install tk pillow` in your terminal.
-You will also probably need to replace the `screenshots_dir` variable with the path to the directory where the screenshots are saved on your system; in src\test\images
+You will also probably need to replace the `screenshots_dir` variable with the path to the 
+directory where the screenshots are saved on your system; in src\test\images
 directory relative to this project's directory.
+
+You may wonder what this has to do with displaying a map of the minecraft world.  
+Well, there are various plugins that can be used to generate a map of the minecraft world and display
+it as a webpage.  This code can be used to display the map in a window on your desktop. 
+The map will update every 100 milliseconds.  You can adjust the update interval by changing
+the `update_interval` variable. 
+
+JSON files will soon contain a variable for the URL of the webpage, which will be passed as an argument in the /mapcast add command.
+
+This readme may contain out-of-date information, the most accurate representation of progreass and functionality will be the commit messages.  
+
+If there ends up being enough contributors, I'll make a discord server.  For now, you can contact me via LinkedIn: https://www.linkedin.com/in/dominic-gena-7b176232b/
+Dominic Gena
