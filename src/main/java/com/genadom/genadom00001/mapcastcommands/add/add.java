@@ -1,62 +1,62 @@
 package com.genadom.genadom00001.mapcastcommands.add;
 
-import com.google.gson.JsonArray;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.IOException;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 public class add {
+
+    private static final Path PROFILES_DIRECTORY = Paths.get("config/mapcast/savedprofiles");
+    private static final Path SAVED_PROFILES_FILE = Paths.get("config/mapcast/savedprofiles.json");
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("mapcast")
                 .then(literal("add")
                         .then(CommandManager.argument("name", StringArgumentType.string())
                                 .then(CommandManager.argument("aspectRatio", DoubleArgumentType.doubleArg())
-                                        .then(CommandManager.argument("targetXLength", IntegerArgumentType.integer())
-                                                .then(CommandManager.argument("targetYLength", IntegerArgumentType.integer())
-                                                        .executes(context -> {
-                                                            String name = StringArgumentType.getString(context, "name");
-                                                            double aspectRatio = DoubleArgumentType.getDouble(context, "aspectRatio");
-                                                            int targetXLength = IntegerArgumentType.getInteger(context, "targetXLength");
-                                                            int targetYLength = IntegerArgumentType.getInteger(context, "targetYLength");
+                                        .then(CommandManager.argument("targetYLength", IntegerArgumentType.integer())
+                                                .then(CommandManager.argument("targetXLength", IntegerArgumentType.integer())
+                                                        .then(CommandManager.argument("imageLink", StringArgumentType.string())
+                                                                .executes(context -> {
+                                                                    String name = StringArgumentType.getString(context, "name");
+                                                                    double aspectRatio = DoubleArgumentType.getDouble(context, "aspectRatio");
+                                                                    int targetYLength = IntegerArgumentType.getInteger(context, "targetYLength");
+                                                                    int targetXLength = IntegerArgumentType.getInteger(context, "targetXLength");
+                                                                    String imageLink = StringArgumentType.getString(context, "imageLink");
 
-                                                            try {
-                                                                // Convert aspect ratio to BigDecimal
-                                                                BigDecimal aspectRatioDecimal = BigDecimal.valueOf(aspectRatio);
+                                                                    // Create JSON file with "active" flag set to false
+                                                                    Path path = PROFILES_DIRECTORY.resolve(name + ".json").normalize();
+                                                                    if (!path.startsWith(PROFILES_DIRECTORY)) {
+                                                                        context.getSource().sendFeedback(() -> Text.of("Invalid file path!"), false);
+                                                                        return 1;
+                                                                    }
 
-                                                                // Check for duplicate profile name
-                                                                if (profileExists(name)) {
-                                                                    context.getSource().sendFeedback(() -> Text.of("That map profile already exists!"), false);
-                                                                } else {
-                                                                    // Create JSON file
-                                                                    createJsonFile(name, aspectRatioDecimal, targetXLength, targetYLength);
-                                                                    context.getSource().sendFeedback(() -> Text.of("Mapcast added successfully!"), false);
-                                                                }
-                                                            } catch (Exception e) {
-                                                                context.getSource().sendFeedback(() -> Text.of("Error adding mapcast: " + e.getMessage()), false);
-                                                                e.printStackTrace();
-                                                            }
-
-                                                            return 1;
-                                                        })
+                                                                    try {
+                                                                        createJsonFile(path, name, aspectRatio, targetYLength, targetXLength, imageLink);
+                                                                        updateSavedProfiles(name);
+                                                                        context.getSource().sendFeedback(() -> Text.of("Profile added: " + name), false);
+                                                                    } catch (IOException e) {
+                                                                        context.getSource().sendFeedback(() -> Text.of("Error creating profile: " + e.getMessage()), false);
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                    return 1;
+                                                                })
+                                                        )
                                                 )
                                         )
                                 )
@@ -65,77 +65,36 @@ public class add {
         );
     }
 
-    private static boolean profileExists(String name) {
-        try {
-            // Define the path to savedprofiles.json
-            Path savedProfilesPath = Paths.get("config/mapcast/savedprofiles.json");
-
-            // Read the existing JSON file
-            String jsonContent = new String(Files.readAllBytes(savedProfilesPath));
-            JsonObject jsonObject = JsonParser.parseString(jsonContent).getAsJsonObject();
-
-            // Get the profiles array and check if the profile name exists
-            JsonArray profilesArray = jsonObject.getAsJsonArray("profiles");
-            for (int i = 0; i < profilesArray.size(); i++) {
-                if (profilesArray.get(i).getAsString().equals(name)) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    private static void createJsonFile(Path path, String name, double aspectRatio, int targetYLength, int targetXLength, String imageLink) throws IOException {
+        if (Files.exists(path)) {
+            throw new IOException("Profile already exists!");
         }
-        return false;
+
+        JsonObject profile = new JsonObject();
+        profile.addProperty("name", name);
+        profile.addProperty("aspectRatio", aspectRatio);
+        profile.addProperty("targetYLength", targetYLength);
+        profile.addProperty("targetXLength", targetXLength);
+        profile.addProperty("imageLink", imageLink);
+        profile.addProperty("active", false);
+
+        Files.createDirectories(path.getParent());
+        Files.write(path, profile.toString().getBytes(), StandardOpenOption.CREATE_NEW);
     }
 
-    private static void createJsonFile(String name, BigDecimal aspectRatio, int targetXLength, int targetYLength) {
-        try {
-            // Create directories if they do not exist
-            Path directory = Paths.get("config/mapcast/savedprofiles");
-            if (!Files.exists(directory)) {
-                Files.createDirectories(directory);
-            }
-
-            // Generate a unique file name based on the map name
-            Path path = directory.resolve(name + ".json");
-            Map<String, Object> data = new HashMap<>();
-            data.put("name", name);
-            data.put("aspectRatio", aspectRatio);
-            data.put("targetXLength", targetXLength);
-            data.put("targetYLength", targetYLength);
-
-            // Convert map to JSON string
-            String jsonString = new Gson().toJson(data);
-
-            // Write JSON string to file
-            Files.write(path, jsonString.getBytes());
-
-            // Append the name to savedprofiles.json
-            appendToSavedProfiles(name);
-        } catch (Exception e) {
-            e.printStackTrace();
+    private static void updateSavedProfiles(String name) throws IOException {
+        JsonObject savedProfiles;
+        if (Files.exists(SAVED_PROFILES_FILE)) {
+            String content = new String(Files.readAllBytes(SAVED_PROFILES_FILE));
+            savedProfiles = JsonParser.parseString(content).getAsJsonObject();
+        } else {
+            savedProfiles = new JsonObject();
+            savedProfiles.add("profiles", new JsonArray());
         }
-    }
 
-    private static void appendToSavedProfiles(String name) {
-        try {
-            // Define the path to savedprofiles.json
-            Path savedProfilesPath = Paths.get("config/mapcast/savedprofiles.json");
+        JsonArray profiles = savedProfiles.getAsJsonArray("profiles");
+        profiles.add(name);
 
-            // Read the existing JSON file
-            String jsonContent = new String(Files.readAllBytes(savedProfilesPath));
-            JsonObject jsonObject = JsonParser.parseString(jsonContent).getAsJsonObject();
-
-            // Get the profiles array and add the new profile name
-            JsonArray profilesArray = jsonObject.getAsJsonArray("profiles");
-            profilesArray.add(name);
-
-            // Update the JSON object
-            jsonObject.add("profiles", profilesArray);
-
-            // Write the updated JSON back to the file
-            Files.write(savedProfilesPath, new Gson().toJson(jsonObject).getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Files.write(SAVED_PROFILES_FILE, savedProfiles.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 }

@@ -15,6 +15,8 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 public class load {
 
+    private static final Path PROFILES_DIRECTORY = Paths.get("config/mapcast/savedprofiles");
+
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("mapcast")
                 .then(literal("load")
@@ -23,8 +25,14 @@ public class load {
                                 .executes(context -> {
                                     String name = StringArgumentType.getString(context, "name");
 
+                                    // Validate and sanitize the input path
+                                    Path path = PROFILES_DIRECTORY.resolve(name + ".json").normalize();
+                                    if (!path.startsWith(PROFILES_DIRECTORY)) {
+                                        context.getSource().sendFeedback(() -> Text.of("Invalid file path!"), false);
+                                        return 1;
+                                    }
+
                                     // Load JSON file
-                                    Path path = Paths.get("config/mapcast/savedprofiles", name + ".json");
                                     if (Files.exists(path)) {
                                         context.getSource().sendFeedback(() -> Text.of("JSON file loaded at " + path.toString()), false);
                                     } else {
