@@ -78,8 +78,8 @@ public class load {
                                                 Path framesPath = emptyProfilePath.resolve("frames");
                                                 Files.createDirectories(framesPath);
 
-                                                // Execute the screenshot.js script
-                                                executeScreenshotScript(name);
+                                                // Execute the screenshot.js script with target directory
+                                                executeScreenshotScript(name, framesPath.toString());
 
                                                 context.getSource().sendFeedback(() -> Text.of("Profile " + name + " is now active in directory: " + emptyProfileHolder[0]), false);
                                             }
@@ -129,11 +129,12 @@ public class load {
         return null;
     }
 
-    private static void executeScreenshotScript(String profileName) {
+    private static void executeScreenshotScript(String profileName, String targetDirectory) {
         ProcessBuilder processBuilder = new ProcessBuilder(
                 NODE_EXECUTABLE.toString(),
                 SCRIPT_PATH.toString(),
-                profileName
+                profileName,
+                targetDirectory
         );
 
         processBuilder.redirectErrorStream(true); // Combine error and output streams
