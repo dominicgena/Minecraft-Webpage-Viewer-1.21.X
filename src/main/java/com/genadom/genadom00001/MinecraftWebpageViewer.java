@@ -6,6 +6,7 @@ import com.genadom.genadom00001.mapcastcommands.remove.remove;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
+
 public class MinecraftWebpageViewer implements ModInitializer {
 
 	@Override

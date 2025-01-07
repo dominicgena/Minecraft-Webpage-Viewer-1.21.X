@@ -10,7 +10,9 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +24,8 @@ public class load {
 
     private static final Path PROFILES_DIRECTORY = Paths.get("config/mapcast/savedprofiles");
     private static final Path FRAME_CONTAINER_DIRECTORY = Paths.get("config/mapcast/framecontainer");
+    private static final Path NODE_EXECUTABLE = Paths.get("bin/node-v22.12.0-win-x64/node.exe");
+    private static final Path SCRIPT_PATH = Paths.get("bin/nodescripts/screenshot.js");
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("mapcast")
@@ -74,6 +78,9 @@ public class load {
                                                 Path framesPath = emptyProfilePath.resolve("frames");
                                                 Files.createDirectories(framesPath);
 
+                                                // Execute the screenshot.js script
+                                                executeScreenshotScript(name);
+
                                                 context.getSource().sendFeedback(() -> Text.of("Profile " + name + " is now active in directory: " + emptyProfileHolder[0]), false);
                                             }
                                         } catch (IOException e) {
@@ -120,5 +127,36 @@ public class load {
             }
         }
         return null;
+    }
+
+    private static void executeScreenshotScript(String profileName) {
+        ProcessBuilder processBuilder = new ProcessBuilder(
+                NODE_EXECUTABLE.toString(),
+                SCRIPT_PATH.toString(),
+                profileName
+        );
+
+        processBuilder.redirectErrorStream(true); // Combine error and output streams
+        try {
+            Process process = processBuilder.start(); // Start the process
+            System.out.println("Started screenshot.js for profile: " + profileName);
+
+            // Create a thread to handle and log process output
+            new Thread(() -> {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println(line); // Log each line of output
+                    }
+                } catch (IOException e) {
+                    System.err.println("Error reading output from screenshot.js: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }).start();
+
+        } catch (IOException e) {
+            System.err.println("Failed to execute screenshot.js: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
