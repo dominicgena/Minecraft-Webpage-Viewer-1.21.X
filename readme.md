@@ -1,9 +1,24 @@
-To test functionality as of 1/6/24, cd to this project's directory in your terminal and run the following command:
-```
-node-v22.12.0-win-x64/node.exe screenshot.js
+To test functionality as of 1/7/24, open this project in an IDE that has the Minecraft Development plugin installed.  This
+will allow you to open the mod in a Minecraft Development environment.  You can then run the following command in the
+Put the python script below in to your preferred python IDE, and run it, refactoring the path at the top to the path of the
+screenshots directory.  Running for the first time will put the frames into the run/config/mapcast/framecontainer/profile0/frames directory.  
+Each time after into the single-incremented index version of that directory (profile1, profile2, etc).  The frames will be saved as .png files.
+If you want to see both tests, you'll need to create a copy of the main python script, refactoring the path again. 
+
+Here's the commands you can use to start the web rendering process, containing my recommended web pages to use as the link argument, 
+as they meet all the necessary qualifications.  
+There will be hints in the console that display the expected argument types and/or acceptable values
+1. /mapcast add j 13.13 15 15 "https://www.w3schools.com/howto/howto_css_loader.asp"
+2. /mapcast add k 13.13 15 15 "https://cssloaders.github.io/"
+3. /mapcast load j <x> <y> <z> <facing>
+4. /mapcast load k <x> <y> <z> <facing>
+
+The first two will generate a json file with the necessary parameters to render the webpage.  The last two will load the json file
+and render the webpage. 
+The script below can be used for monitoring. 
+
 ```
 
-This will generate a screenshot of the website at the URL specified in the `screenshot.js` file. The screenshot will be saved in the `src.test.images` directory.
 
 Then you can paste the below code into a separate python project to actually see the animation. 
 
