@@ -84,7 +84,7 @@ public class unload {
         );
     }
 
-    private static void unloadProfile(Path profilePath, ServerCommandSource source) {
+    public static void unloadProfile(Path profilePath, ServerCommandSource source) {
         try {
             String content = new String(Files.readAllBytes(profilePath));
             JsonObject jsonObject = JsonParser.parseString(content).getAsJsonObject();
