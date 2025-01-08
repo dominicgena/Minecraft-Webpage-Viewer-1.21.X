@@ -77,6 +77,10 @@ public class add {
         profile.addProperty("targetXLength", targetXLength);
         profile.addProperty("imageLink", imageLink);
         profile.addProperty("active", false);
+        profile.add("originx", null);
+        profile.add("originy", null);
+        profile.add("originz", null);
+        profile.add("facing", null);
 
         Files.createDirectories(path.getParent());
         Files.write(path, profile.toString().getBytes(), StandardOpenOption.CREATE_NEW);
