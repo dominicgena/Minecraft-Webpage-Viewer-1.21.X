@@ -1,3 +1,5 @@
+JUST A WARNING - 
+
 To test functionality as of 1/7/24, open this project in an IDE that has the Minecraft Development plugin installed.  This
 will allow you to open the mod in a Minecraft Development environment.  You can then run the following command in the
 Put the python script below in to your preferred python IDE, and run it, refactoring the path at the top to the path of the
@@ -10,8 +12,8 @@ as they meet all the necessary qualifications.
 There will be hints in the console that display the expected argument types and/or acceptable values
 1. /mapcast add j 13.13 15 15 "https://www.w3schools.com/howto/howto_css_loader.asp"
 2. /mapcast add k 13.13 15 15 "https://cssloaders.github.io/"
-3. /mapcast load j <x> <y> <z> <facing>
-4. /mapcast load k <x> <y> <z> <facing>
+3. /mapcast load j {x} {y} {z} {facing}
+4. /mapcast load k {x} {y} {z} {facing}
 
 The first two will generate a json file with the necessary parameters to render the webpage.  The last two will load the json file
 and render the webpage. 
