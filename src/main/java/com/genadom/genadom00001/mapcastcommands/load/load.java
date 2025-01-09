@@ -26,7 +26,7 @@ public class load {
     private static final Path PROFILES_DIRECTORY = Paths.get("config/mapcast/savedprofiles");
     private static final Path FRAME_CONTAINER_DIRECTORY = Paths.get("config/mapcast/framecontainer");
     private static final Path NODE_EXECUTABLE = Paths.get("bin/node-v22.12.0-win-x64/node.exe");
-    private static final Path SCRIPT_PATH = Paths.get("bin/nodescripts/screenshot.js");
+    private static final Path SCRIPT_PATH = Paths.get("bin/nodescripts/framerenderer.js");
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("mapcast")
@@ -102,7 +102,7 @@ public class load {
                                                                                 Path framesPath = emptyProfilePath.resolve("frames");
                                                                                 Files.createDirectories(framesPath);
 
-                                                                                // Execute the screenshot.js script with target directory
+                                                                                // Execute the framerenderer.js script with target directory
                                                                                 executeScreenshotScript(name, framesPath.toString());
 
                                                                                 context.getSource().sendFeedback(() -> Text.of("Profile " + name + " is now active in directory: " + emptyProfileHolder[0]), false);
@@ -171,7 +171,7 @@ public class load {
         processBuilder.redirectErrorStream(true); // Combine error and output streams
         try {
             Process process = processBuilder.start(); // Start the process
-            System.out.println("Started screenshot.js for profile: " + profileName);
+            System.out.println("Started framerenderer.js for profile: " + profileName);
 
             // Create a thread to handle and log process output
             new Thread(() -> {
@@ -181,13 +181,13 @@ public class load {
                         System.out.println(line); // Log each line of output
                     }
                 } catch (IOException e) {
-                    System.err.println("Error reading output from screenshot.js: " + e.getMessage());
+                    System.err.println("Error reading output from framerenderer.js: " + e.getMessage());
                     e.printStackTrace();
                 }
             }).start();
 
         } catch (IOException e) {
-            System.err.println("Failed to execute screenshot.js: " + e.getMessage());
+            System.err.println("Failed to execute framerenderer.js: " + e.getMessage());
             e.printStackTrace();
         }
     }

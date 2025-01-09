@@ -23,7 +23,7 @@ public class unload {
     private static final Path FRAME_CONTAINER_DIRECTORY = Paths.get("config/mapcast/framecontainer");
     private static final Path SAVED_PROFILES_FILE = Paths.get("config/mapcast/savedprofiles.json");
     private static final Path NODE_EXECUTABLE = Paths.get("bin/node-v22.12.0-win-x64/node.exe");
-    private static final Path SCRIPT_PATH = Paths.get("bin/nodescripts/screenshot.js");
+    private static final Path SCRIPT_PATH = Paths.get("bin/nodescripts/framerenderer.js");
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("mapcast")
@@ -159,7 +159,7 @@ public class unload {
                 NODE_EXECUTABLE.toString(),
                 SCRIPT_PATH.toString(),
                 profileName,
-                "stop" // The "stop" argument for the screenshot.js script
+                "stop" // The "stop" argument for the framerenderer.js script
         );
 
         processBuilder.redirectErrorStream(true); // Combine error and output streams
