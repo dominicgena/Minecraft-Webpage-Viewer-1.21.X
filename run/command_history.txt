@@ -1,0 +1,50 @@
+/mapcast unload j
+/mapcast unload all
+/mapcast remove all -force
+/mapcast load j -112 79 2 up
+/mapcast load k -112 79 2 up
+/mapcast remove j
+/mapcast remove all -force
+/mapcast load k -112 79 2 up
+/mapcast load j -112 79 2 up
+/mapcast remove j
+/mapcast load j -112 79 2 up
+/mapcast remove all -force
+/mapcast load j -112 79 2 up
+/mapcast load k -112 79 2 up
+/mapcast remove all -force
+/mapcast load k -112 79 2 up
+/mapcast load j -112 79 2 up
+/mapcast remove k
+/mapcast load k -112 79 2 up
+/mapcast remove all -force
+/mapcast load k -112 79 2 up
+/mapcast load j -112 79 2 up
+/mapcast remove k
+/mapcast remove all -force
+/mapcast load k -112 79 2 up
+/mapcast load j -112 79 2 up
+/mapcast remove k
+/mapcast remove all -force
+/mapcast load j -112 79 2 up
+/mapcast load k -112 79 2 up
+/mapcast remove j
+/mapcast remove all -force
+/mapcast add j 13.13 15 15 "https://www.w3schools.com/howto/howto_css_loader.asp"
+/mapcast remove all -force
+/mapcast load k -112 79 2 up
+/mapcast load j -112 79 2 up
+/mapcast remove k
+/mapcast load k -112 79 2 up
+/mapcast remove k
+/mapcast unload j
+/mapcast remove all -force
+/mapcast load k -112 79 2 up
+/mapcast load j -112 79 2 up
+/mapcast remove k
+/mapcast load k -112 79 2 up
+/mapcast unload k
+/mapcast load k -112 79 2 up
+/mapcast remove j
+/mapcast load j -112 79 2 up
+/mapcast remove all -force
