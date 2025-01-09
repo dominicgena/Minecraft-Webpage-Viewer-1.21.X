@@ -1,28 +1,28 @@
 # gradle
-
-.gradle/
-build/
-out/
-classes/
+#
+#.gradle/
+#build/
+#out/
+#classes/
 
 # eclipse
 
-*.launch
-
-# idea
-
-.idea/
-*.iml
-*.ipr
-*.iws
+#*.launch
+#
+## idea
+#
+#.idea/
+#*.iml
+#*.ipr
+#*.iws
 
 # vscode
 
-.settings/
-.vscode/
-bin/
-.classpath
-.project
+#.settings/
+#.vscode/
+#bin/
+#.classpath
+#.project
 
 # macos
 
@@ -30,7 +30,7 @@ bin/
 
 # fabric
 
-run/
+#run/
 
 # java
 
