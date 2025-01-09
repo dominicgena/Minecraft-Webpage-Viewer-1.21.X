@@ -1,7 +1,17 @@
 plugins {
 	id 'fabric-loom' version '1.9-SNAPSHOT'
 	id 'maven-publish'
+	id 'com.github.node-gradle.node' version '3.5.1'
 }
+
+node {
+	version = '16.17.0' // Specify the version of Node.js you need
+	npmVersion = '8.19.2' // Optional: Specify the npm version
+	download = true // Automatically download and install Node.js locally
+	workDir = file("${project.projectDir}/bin/nodejs") 	// Directory for `node` and `npm`
+	nodeModulesDir = file("${project.projectDir}/src/main/js") // Directory for `node_modules`
+}
+
 
 version = project.mod_version
 group = project.maven_group
